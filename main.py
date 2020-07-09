@@ -7,6 +7,7 @@ import time
 from math import ceil
 from datetime import datetime
 from dotenv import load_dotenv
+import dateutil.parser
 
 load_dotenv()
 
@@ -74,9 +75,11 @@ def build_data(order: dict, item: dict, filial: str) -> dict:
         price = item['price_un']
     else:
         price = item['price']
+
+    date = dateutil.parser.parse(order['date']).strftime("%d/%m/%Y %H:%M:%S")
     dados = {
         "Id_pedido": order['id'],
-        "Data": order['date'],
+        "Data": date,
         "Item": item['title'],
         "Quantidade": item['quantity'],
         "Valor Unitario": price,
