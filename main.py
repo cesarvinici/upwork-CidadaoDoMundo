@@ -83,7 +83,7 @@ def build_data(order: dict, item: dict, filial: str) -> dict:
         "Item": item['title'],
         "Quantidade": item['quantity'],
         "Valor Unitario": price,
-        "Subtotal": price * item['quantity'],
+        "Subtotal": round(price * item['quantity'], 2),
         "Nome": order['name'].upper(),
         "Filial": filial.title(),
         "Canal": "SITE",
