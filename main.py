@@ -39,6 +39,18 @@ def parse_data(orders: list, filial: str) -> list:
     return parsed_orders
 
 
+
+def map_order_status(status_id: int) -> str:
+    status = {0: "Novo Pedido",
+              1: "Confirmado",
+              2: "Entregue",
+              3:"Cancelado (restaurante)",
+              4: "Enviado",
+              5: "Cancelado Automaticamente (sistema)",
+              6: "Cancelado com Pagamento Estornado (restaurante)",
+              7: "Cancelado Automaticamente, com Pagamento Estornado"}
+    return status[status_id]
+
 def get_orders(tokens: dict) -> list:
     """
     Get all order_id of the given date
@@ -87,7 +99,8 @@ def build_data(order: dict, item: dict, filial: str) -> dict:
         "Nome": order['name'].upper(),
         "Filial": filial.title(),
         "Canal": "SITE",
-        "Pagamento": order['payment_method'].upper()
+        "Pagamento": order['payment_method'].upper(),
+        "Status": map_order_status(order['status'])
     }
     return dados
 
