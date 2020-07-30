@@ -39,17 +39,17 @@ def parse_data(orders: list, filial: str) -> list:
     return parsed_orders
 
 
-
 def map_order_status(status_id: int) -> str:
     status = {0: "Novo Pedido",
               1: "Confirmado",
               2: "Entregue",
-              3:"Cancelado (restaurante)",
+              3: "Cancelado (restaurante)",
               4: "Enviado",
               5: "Cancelado Automaticamente (sistema)",
               6: "Cancelado com Pagamento Estornado (restaurante)",
               7: "Cancelado Automaticamente, com Pagamento Estornado"}
     return status[status_id]
+
 
 def get_orders(tokens: dict) -> list:
     """
@@ -70,6 +70,8 @@ def get_orders(tokens: dict) -> list:
             pages = ceil(data['paging']['total'] / ITEMS_PER_PAGE)
             for page in range(2, pages):
                 payload['page'] = page
+                data = get_from_api(payload)
+                orders = data['Orders']
                 orders_list.extend(parse_data(orders, key))
 
     return orders_list
@@ -158,22 +160,21 @@ def extract_data(dados: list) -> None:
 
 def main():
     start = time.time()
-    today = datetime.today().strftime("%d/%m/%Y %H:%M:%S")
     tokens = {"agua verde": AGUA_VERDE_TOKEN, "boqueirao": BOQUEIRAO_TOKEN}
 
-    print(str(today) + " - BUSCANDO REGISTRO DE PEDIDOS...")
+    print(str(datetime.today().strftime("%d/%m/%Y %H:%M:%S")) + " - BUSCANDO REGISTRO DE PEDIDOS...")
     orders = get_orders(tokens)
 
-    print(str(today) + " - BUSCANDO ITENS...")
+    print(str(datetime.today().strftime("%d/%m/%Y %H:%M:%S")) + " - BUSCANDO ITENS...")
     orders_data = get_order_items(orders, tokens)
 
-    print(str(today) + " - SALVANDO ARQUIVO...")
+    print(str(datetime.today().strftime("%d/%m/%Y %H:%M:%S")) + " - SALVANDO ARQUIVO...")
     extract_data(orders_data)
 
-    print(str(today) + " - DADOS CARREGADOS COM SUCESSO!")
-    print(str(today) + " - " + FILE_PATH + "/lista_vendas_" + str(DT_REF) + ".csv")
+    print(str(datetime.today().strftime("%d/%m/%Y %H:%M:%S")) + " - DADOS CARREGADOS COM SUCESSO!")
+    print(str(datetime.today().strftime("%d/%m/%Y %H:%M:%S")) + " - " + FILE_PATH + "/lista_vendas_" + str(DT_REF) + ".csv")
 
-    print(str(today) + " - Tempo total: " + str(round(time.time() - start, 2)) + " segundos")
+    print(str(datetime.today().strftime("%d/%m/%Y %H:%M:%S")) + " - Tempo total: " + str(round(time.time() - start, 2)) + " segundos")
 
 
 if __name__ == "__main__":
