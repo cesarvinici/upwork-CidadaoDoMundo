@@ -67,7 +67,7 @@ def get_orders(tokens: dict) -> list:
         # checks if the total items is greater than limited items per page (50)
         # if so we need to grab the other pages
         if data['paging']['total'] > ITEMS_PER_PAGE:
-            pages = ceil(data['paging']['total'] / ITEMS_PER_PAGE)
+            pages = ceil(data['paging']['total'] / ITEMS_PER_PAGE) + 1
             for page in range(2, pages):
                 payload['page'] = page
                 data = get_from_api(payload)
